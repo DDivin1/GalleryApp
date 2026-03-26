@@ -7,44 +7,49 @@
 
 import Foundation
 
-enum CodingKeys: String, CodingKey {
-    case id, urls, user, description, likes
-    case altDescription = "alt_description"
-    case createdAt = "created_at"
-}
-enum UserCodingKeys: String, CodingKey {
-    case id, name, username
-    case profileImage = "profile_image"
-}
-
-struct Images: Codable {
+struct Images: Codable, Identifiable {
     let id: String
-    let urls: PhotoURLs
-    let user: User
     let description: String?
     let altDescription: String?
-    let likes: Int
-    let createdAt: String
+    let likes: Int?
+    let createdAt: String?
+    let urls: PhotoURLs
+    let user: User?
+    
+    var displayDescription: String {
+        description ?? altDescription ?? "No description"
+    }
 }
 
+enum CodingKeys: String, CodingKey {
+    case id
+    case description
+    case altDescription = "alt_description"
+    case likes
+    case createdAt = "created_at"
+    case urls
+    case user
+}
+
+
 struct PhotoURLs: Codable {
-    let raw: String
-    let full: String
-    let regular: String
-    let small: String
-    let thumb: String
+    let raw: String?
+    let full: String?
+    let regular: String?
+    let small: String?
+    let thumb: String?
+    
+    var thumbURL: String? {thumb ?? small ?? regular}
+    var regularURL: String? {regular ?? full}
 }
 
 struct User: Codable {
-    let id: String
-    let name: String
-    let username: String
-    let profileImage: ProfileImage?
+    let name: String?
+    let username: String?
+    
+    var displayName: String {
+        name ?? username ?? "Unknown"
+    }
 }
 
-struct ProfileImage: Codable {
-    let medium: String
-    let small: String
-    let large: String
-}
 
