@@ -17,4 +17,11 @@ enum AppConstants {
         return key
     }()
     
+    enum Numbers {
+        static let numberOfFetchingImages: Int = 30
+    }
+    
+    enum Strings {
+        static let favoritesKey: String = "favoritesImagesIds"
+    }
 }
