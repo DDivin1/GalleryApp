@@ -13,6 +13,7 @@ final class ImageGalleryViewController: UIViewController {
     private let viewModel: ImageGalleryViewModel
     private var collectionView: UICollectionView!
     
+    
     init (viewModel: ImageGalleryViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
@@ -24,6 +25,8 @@ final class ImageGalleryViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .red
+        view.backgroundColor = .systemBackground
+        title = ImageGalleryViewControllerConstants.Strings.galleryLabelText
+        
     }
 }
