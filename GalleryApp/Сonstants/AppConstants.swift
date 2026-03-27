@@ -19,6 +19,7 @@ enum AppConstants {
     
     enum Numbers {
         static let numberOfFetchingImages: Int = 30
+        static let currentPage: Int = 1
     }
     
     enum Strings {
