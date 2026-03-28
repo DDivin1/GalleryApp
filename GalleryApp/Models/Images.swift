@@ -13,26 +13,25 @@ struct Images: Codable, Identifiable {
     let altDescription: String?
     let likes: Int?
     let createdAt: String?
-    let urls: PhotoURLs
+    let urls: ImagesURLs
     let user: User?
     
     var displayDescription: String {
         description ?? altDescription ?? "No description"
     }
+    
+    enum CodingKeys: String, CodingKey {
+        case id
+        case description
+        case altDescription = "alt_description"
+        case likes
+        case createdAt = "created_at"
+        case urls
+        case user
+    }
 }
 
-enum CodingKeys: String, CodingKey {
-    case id
-    case description
-    case altDescription = "alt_description"
-    case likes
-    case createdAt = "created_at"
-    case urls
-    case user
-}
-
-
-struct PhotoURLs: Codable {
+struct ImagesURLs: Codable {
     let raw: String?
     let full: String?
     let regular: String?
