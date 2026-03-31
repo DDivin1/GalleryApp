@@ -26,6 +26,7 @@ enum ImageGalleryViewControllerConstants {
     
     enum Strings {
         static let galleryLabelText: String = "Gallery"
+        static let emptyLabelText: String = "No images found"
         
     }
 }

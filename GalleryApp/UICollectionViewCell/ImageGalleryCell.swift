@@ -12,6 +12,7 @@ final class ImageGalleryCell: UICollectionViewCell {
     
     static var identifier: String { "\(Self.self)" }
     
+    var onFavoriteTapped: (() -> Void)?
     
     private let imagesImageView: UIImageView = {
         let imageView = UIImageView()
@@ -21,7 +22,7 @@ final class ImageGalleryCell: UICollectionViewCell {
     }()
     
     private let likeButton: UIButton = {
-        let button = UIButton(type: .system)
+        let button = UIButton(type: .custom)
         button.setImage(UIImage(systemName: "heart"), for: .normal)
         button.setImage(UIImage(systemName: "heart.fill"), for: .selected)
         button.tintColor = .systemRed
@@ -61,28 +62,23 @@ final class ImageGalleryCell: UICollectionViewCell {
         likeButton.addTarget(self, action: #selector(likeButtonPressed), for: .touchUpInside)
     }
     
-    func configure(with image: Images) {
+    func configure(with image: Images, isFavorite: Bool) {
         imagesImageView.image = nil
-        
         imagesImageView.backgroundColor = .systemGray6
         
-        guard let thumbURLString = image.urls.thumbURL,
-              let url = URL(string: thumbURLString) else {
-            return
+        if let thumbURLString = image.urls.thumbURL, let url = URL(string: thumbURLString) {
+            imagesImageView.kf.setImage(
+                with: url,
+                placeholder: UIImage(systemName: "photo"),
+                options: [.transition(.fade(0.3)), .cacheOriginalImage]
+            )
         }
-        imagesImageView.kf.setImage(
-            with: url,
-            placeholder: UIImage(systemName: "photo"),
-            options: [
-                .transition(.fade(0.3)),
-                .cacheOriginalImage
-            ]
-        )
+        likeButton.isSelected = isFavorite
     }
     
     @objc private func likeButtonPressed() {
         likeButton.isSelected.toggle()
-        print("Like pressed!")
+        onFavoriteTapped?()
     }
     
     override func prepareForReuse() {

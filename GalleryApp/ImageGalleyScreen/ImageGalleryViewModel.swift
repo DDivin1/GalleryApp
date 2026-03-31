@@ -16,17 +16,21 @@ final class ImageGalleryViewModel {
     @Published var isLoadingMore: Bool = false
     @Published var errorMessage: String?
     
+    var favoritesIDs: Set<String> = []
+    
     private let networkService: INetworkService
     private let favoritesStorage: IFavoritesStorage
     
     private var currentPage = AppConstants.Numbers.currentPage
     private var canLoadMore: Bool = true
     private var cancellables: Set<AnyCancellable> = []
+
     
     
     init (networkService: INetworkService, favoritesStorage: IFavoritesStorage) {
         self.networkService = networkService
         self.favoritesStorage = favoritesStorage
+        self.favoritesIDs = favoritesStorage.getAllFavoritesIds()
     }
     
     func loadInitialImages() {
@@ -74,6 +78,15 @@ final class ImageGalleryViewModel {
                 self.canLoadMore = !newImages.isEmpty
             }
             .store(in: &cancellables)
+    }
+    
+    func toggleFavorite(for imageID: String) {
+        favoritesStorage.toggleFavorite(id: imageID)
+        favoritesIDs = favoritesStorage.getAllFavoritesIds()
+    }
+    
+    func isFavorite(_ imageID: String) -> Bool {
+        return favoritesIDs.contains(imageID)
     }
     
     
