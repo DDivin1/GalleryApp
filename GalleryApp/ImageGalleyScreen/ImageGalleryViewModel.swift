@@ -86,4 +86,9 @@ final class ImageGalleryViewModel {
     func canLoadMoreImages() -> Bool {
         return canLoadMore
     }
+    
+    func didSelectImage(at index: Int) {
+        guard index < images.count else { return }
+        coordinator?.showDetailScreen(for: images, staringAt: index)
+    }
 }

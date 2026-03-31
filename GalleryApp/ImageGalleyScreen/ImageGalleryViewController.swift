@@ -193,6 +193,16 @@ final class ImageGalleryViewController: UIViewController {
     private func setupInfiniteScroll() {
         collectionView.delegate = self
     }
+    
+    @objc func imageTapped(_ sender: UITapGestureRecognizer) {
+        guard let cell = sender.view as? ImageGalleryCell else {
+            return
+        }
+             guard let indexPath = collectionView.indexPath(for: cell) else {
+            return
+        }
+        viewModel.didSelectImage(at: indexPath.item)
+    }
 }
 
 
@@ -222,6 +232,9 @@ extension ImageGalleryViewController: UICollectionViewDataSource {
             
             cell.configure(with: image, isFavorite: self.viewModel.isFavorite(image.id))
         }
+        cell.contentView.isUserInteractionEnabled = true
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(imageTapped(_:)))
+        cell.addGestureRecognizer(tapGesture)
         return cell
     }
 }

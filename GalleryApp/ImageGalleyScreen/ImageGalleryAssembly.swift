@@ -18,9 +18,8 @@ final class ImageGalleryAssembly {
             networkService: networkService,
             favoritesStorage: favoritesStorage
         )
-        
-        let viewController = ImageGalleryViewController(viewModel: viewModel)
         viewModel.coordinator = coordinator
+        let viewController = ImageGalleryViewController(viewModel: viewModel)
         
         return viewController
     }
