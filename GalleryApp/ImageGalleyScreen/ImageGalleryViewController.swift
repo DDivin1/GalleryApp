@@ -40,6 +40,12 @@ final class ImageGalleryViewController: UIViewController {
         return label
     }()
     
+    private let footerLoadingView: UIActivityIndicatorView = {
+        let indicator = UIActivityIndicatorView(style: .medium)
+        indicator.hidesWhenStopped = true
+        return indicator
+    }()
+    
     init (viewModel: ImageGalleryViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
@@ -56,6 +62,7 @@ final class ImageGalleryViewController: UIViewController {
         setupCollectionView()
         setupStateViews()
         setupDataSourceAndDelegate()
+        setupInfiniteScroll()
         bindViewModel()
         viewModel.loadInitialImages()
     }
@@ -79,6 +86,8 @@ final class ImageGalleryViewController: UIViewController {
         collectionView.register(ImageGalleryCell.self, forCellWithReuseIdentifier: ImageGalleryCell.identifier)
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         collectionView.backgroundColor = .systemBackground
+        
+        collectionView.contentInset.bottom = ImageGalleryViewControllerConstants.Layout.bottomContentInset
         
         view.addSubview(collectionView)
         
@@ -145,6 +154,16 @@ final class ImageGalleryViewController: UIViewController {
             }
             .store(in: &cancellables)
         
+        viewModel.$isLoadingMore
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] isLoadingMore in
+                if isLoadingMore {
+                    self?.footerLoadingView.startAnimating()
+                } else {
+                    self?.footerLoadingView.stopAnimating()
+                }
+            }
+        
         viewModel.$errorMessage
             .receive(on: DispatchQueue.main)
             .sink { [weak self] errorMessage in
@@ -169,6 +188,10 @@ final class ImageGalleryViewController: UIViewController {
         errorLabel.isHidden = !hasError
         emptyLabel.isHidden = !(isEmpty && !isLoading && !hasError)
         collectionView.isHidden = isLoading || hasError
+    }
+    
+    private func setupInfiniteScroll() {
+        collectionView.delegate = self
     }
 }
 
@@ -205,4 +228,15 @@ extension ImageGalleryViewController: UICollectionViewDataSource {
 
 extension ImageGalleryViewController: UICollectionViewDelegateFlowLayout {
     
+}
+
+extension ImageGalleryViewController: UICollectionViewDelegate {
+    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        let lastItem = viewModel.images.count - 1
+        if indexPath.item >= lastItem && !viewModel.isLoadingMore {
+            if viewModel.canLoadMoreImages(){
+                viewModel.loadMoreImages()
+            }
+        }
+    }
 }

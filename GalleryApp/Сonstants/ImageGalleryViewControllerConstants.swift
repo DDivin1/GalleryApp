@@ -16,7 +16,7 @@ enum ImageGalleryViewControllerConstants {
         static let sectionInset: UIEdgeInsets = .init(top: 10, left: 10, bottom: 10, right: 10)
         static let padding: CGFloat = 10
         static let itemSpacing: CGFloat = 10
-        
+        static let bottomContentInset: CGFloat = 80
     }
     
     enum Fonts {
