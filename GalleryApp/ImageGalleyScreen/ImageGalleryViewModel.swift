@@ -16,23 +16,24 @@ final class ImageGalleryViewModel {
     @Published var isLoadingMore: Bool = false
     @Published var errorMessage: String?
     
+    var favoritesIDs: Set<String> = []
+    
     private let networkService: INetworkService
     private let favoritesStorage: IFavoritesStorage
     
-    private var currentPage = AppConstants.Numbers.currentPage
+    private var currentPage = 1
     private var canLoadMore: Bool = true
     private var cancellables: Set<AnyCancellable> = []
-    
-    
+
     init (networkService: INetworkService, favoritesStorage: IFavoritesStorage) {
         self.networkService = networkService
         self.favoritesStorage = favoritesStorage
+        self.favoritesIDs = favoritesStorage.getAllFavoritesIds()
     }
     
     func loadInitialImages() {
         guard !isLoading else { return }
         
-        print("начинаем")
         isLoading = true
         errorMessage = nil
         currentPage = AppConstants.Numbers.currentPage
@@ -42,20 +43,17 @@ final class ImageGalleryViewModel {
             .sink { [weak self] completion in
                 self?.isLoading = false
                 if case .failure(let error) = completion {
-                    print("eror")
                     self?.errorMessage = error.localizedDescription
                 }
             } receiveValue: { [weak self] newImages in
-                print("success")
                 self?.images = newImages
-                self?.currentPage = 1
                 self?.canLoadMore = !newImages.isEmpty
             }
             .store(in: &cancellables)
     }
     
     func loadMoreImages() {
-        guard canLoadMore, !isLoadingMore else { return }
+        guard canLoadMore, !isLoading, !isLoadingMore else { return }
         
         isLoadingMore = true
         currentPage += 1
@@ -64,9 +62,9 @@ final class ImageGalleryViewModel {
             .receive(on: DispatchQueue.main)
             .sink { [weak self] completion in
                 self?.isLoadingMore = false
-                
                 if case .failure(let error) = completion {
                     self?.errorMessage = error.localizedDescription
+                    self?.canLoadMore = false
                 }
             } receiveValue: { [weak self] newImages in
                 guard let self = self else {return}
@@ -76,5 +74,21 @@ final class ImageGalleryViewModel {
             .store(in: &cancellables)
     }
     
+    func toggleFavorite(for imageID: String) {
+        favoritesStorage.toggleFavorite(id: imageID)
+        favoritesIDs = favoritesStorage.getAllFavoritesIds()
+    }
     
+    func isFavorite(_ imageID: String) -> Bool {
+        return favoritesIDs.contains(imageID)
+    }
+    
+    func canLoadMoreImages() -> Bool {
+        return canLoadMore
+    }
+    
+    func didSelectImage(at index: Int) {
+        guard index < images.count else { return }
+        coordinator?.showDetailScreen(for: images, staringAt: index)
+    }
 }

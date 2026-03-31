@@ -14,6 +14,38 @@ final class ImageGalleryViewController: UIViewController {
     private var collectionView: UICollectionView!
     private var cancellables = Set<AnyCancellable>()
     
+    private let loadingIndicator: UIActivityIndicatorView = {
+        let indicator = UIActivityIndicatorView(style: .large)
+        indicator.hidesWhenStopped = true
+        return indicator
+    }()
+    
+    private let errorLabel: UILabel = {
+        let label = UILabel()
+        label.textColor = .secondaryLabel
+        label.textAlignment = .center
+        label.font = .systemFont(ofSize: 16)
+        label.numberOfLines = 0
+        label.isHidden = true
+        return label
+    }()
+    
+    private let emptyLabel: UILabel = {
+        let label = UILabel()
+        label.text = ImageGalleryViewControllerConstants.Strings.emptyLabelText
+        label.textColor = .secondaryLabel
+        label.textAlignment = .center
+        label.font = .systemFont(ofSize: 18)
+        label.isHidden = true
+        return label
+    }()
+    
+    private let footerLoadingView: UIActivityIndicatorView = {
+        let indicator = UIActivityIndicatorView(style: .medium)
+        indicator.hidesWhenStopped = true
+        return indicator
+    }()
+    
     init (viewModel: ImageGalleryViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
@@ -28,7 +60,9 @@ final class ImageGalleryViewController: UIViewController {
         view.backgroundColor = .systemBackground
         title = ImageGalleryViewControllerConstants.Strings.galleryLabelText
         setupCollectionView()
+        setupStateViews()
         setupDataSourceAndDelegate()
+        setupInfiniteScroll()
         bindViewModel()
         viewModel.loadInitialImages()
     }
@@ -53,6 +87,8 @@ final class ImageGalleryViewController: UIViewController {
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         collectionView.backgroundColor = .systemBackground
         
+        collectionView.contentInset.bottom = ImageGalleryViewControllerConstants.Layout.bottomContentInset
+        
         view.addSubview(collectionView)
         
         NSLayoutConstraint.activate([
@@ -61,7 +97,29 @@ final class ImageGalleryViewController: UIViewController {
             collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
+    }
+    
+    private func setupStateViews() {
+        view.addSubview(loadingIndicator)
+        view.addSubview(errorLabel)
+        view.addSubview(emptyLabel)
         
+        loadingIndicator.translatesAutoresizingMaskIntoConstraints = false
+        errorLabel.translatesAutoresizingMaskIntoConstraints = false
+        emptyLabel.translatesAutoresizingMaskIntoConstraints = false
+        
+        NSLayoutConstraint.activate([
+            loadingIndicator.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            loadingIndicator.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            
+            errorLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            errorLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            errorLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 40),
+            errorLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -40),
+            
+            emptyLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            emptyLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor)
+        ])
     }
     
     private func setupDataSourceAndDelegate() {
@@ -72,23 +130,80 @@ final class ImageGalleryViewController: UIViewController {
     private func bindViewModel() {
         
         viewModel.$images
-        
             .receive(on: DispatchQueue.main)
             .sink { [weak self] images in
                 print("получено изображение :\(images.count)")
                 self?.collectionView.reloadData()
+                self?.updateStateViews(
+                    isLoading: false,
+                    hasError: false,
+                    isEmpty: images.isEmpty
+                )
             }
             .store(in: &cancellables)
         
         viewModel.$isLoading
             .receive(on: DispatchQueue.main)
-            .sink { isLoading in
+            .sink { [weak self] isLoading in
                 print("Loading state: \(isLoading)")
+                self?.updateStateViews(
+                    isLoading: isLoading,
+                    hasError: self?.viewModel.errorMessage != nil,
+                    isEmpty: self?.viewModel.images.isEmpty ?? true
+                )
+            }
+            .store(in: &cancellables)
+        
+        viewModel.$isLoadingMore
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] isLoadingMore in
+                if isLoadingMore {
+                    self?.footerLoadingView.startAnimating()
+                } else {
+                    self?.footerLoadingView.stopAnimating()
+                }
+            }
+        
+        viewModel.$errorMessage
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] errorMessage in
+                if let message = errorMessage {
+                    self?.errorLabel.text = message
+                }
+                self?.updateStateViews(isLoading: self?.viewModel.isLoading ?? false,
+                                       hasError: errorMessage != nil,
+                                       isEmpty: self?.viewModel.images.isEmpty ?? true)
             }
             .store(in: &cancellables)
     }
+    
+    private func updateStateViews(isLoading: Bool, hasError: Bool, isEmpty: Bool) {
+        if isLoading {
+            loadingIndicator.startAnimating()
+        } else {
+            loadingIndicator.stopAnimating()
+        }
+        
+        loadingIndicator.isHidden = !isLoading
+        errorLabel.isHidden = !hasError
+        emptyLabel.isHidden = !(isEmpty && !isLoading && !hasError)
+        collectionView.isHidden = isLoading || hasError
+    }
+    
+    private func setupInfiniteScroll() {
+        collectionView.delegate = self
+    }
+    
+    @objc func imageTapped(_ sender: UITapGestureRecognizer) {
+        guard let cell = sender.view as? ImageGalleryCell else {
+            return
+        }
+             guard let indexPath = collectionView.indexPath(for: cell) else {
+            return
+        }
+        viewModel.didSelectImage(at: indexPath.item)
+    }
 }
-
 
 
 extension ImageGalleryViewController: UICollectionViewDataSource {
@@ -105,11 +220,36 @@ extension ImageGalleryViewController: UICollectionViewDataSource {
         }
         
         let image = viewModel.images[indexPath.item]
-        cell.configure(with: image)
+        let isFavorite = viewModel.favoritesIDs.contains(image.id)
+        
+        cell.configure(with: image, isFavorite: isFavorite)
+        
+        cell.onFavoriteTapped = { [weak self, weak cell] in
+            guard let self = self, let cell = cell else { return }
+            
+            let image = self.viewModel.images[indexPath.item]
+            self.viewModel.toggleFavorite(for: image.id)
+            
+            cell.configure(with: image, isFavorite: self.viewModel.isFavorite(image.id))
+        }
+        cell.contentView.isUserInteractionEnabled = true
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(imageTapped(_:)))
+        cell.addGestureRecognizer(tapGesture)
         return cell
     }
 }
 
 extension ImageGalleryViewController: UICollectionViewDelegateFlowLayout {
     
+}
+
+extension ImageGalleryViewController: UICollectionViewDelegate {
+    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        let lastItem = viewModel.images.count - 1
+        if indexPath.item >= lastItem && !viewModel.isLoadingMore {
+            if viewModel.canLoadMoreImages(){
+                viewModel.loadMoreImages()
+            }
+        }
+    }
 }
