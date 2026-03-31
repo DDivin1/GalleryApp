@@ -32,6 +32,7 @@ final class ImageGalleryViewModel {
     func loadInitialImages() {
         guard !isLoading else { return }
         
+        print("начинаем")
         isLoading = true
         errorMessage = nil
         currentPage = AppConstants.Numbers.currentPage
@@ -41,9 +42,11 @@ final class ImageGalleryViewModel {
             .sink { [weak self] completion in
                 self?.isLoading = false
                 if case .failure(let error) = completion {
+                    print("eror")
                     self?.errorMessage = error.localizedDescription
                 }
             } receiveValue: { [weak self] newImages in
+                print("success")
                 self?.images = newImages
                 self?.currentPage = 1
                 self?.canLoadMore = !newImages.isEmpty

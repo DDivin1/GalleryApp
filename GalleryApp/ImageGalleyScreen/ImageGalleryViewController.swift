@@ -75,6 +75,7 @@ final class ImageGalleryViewController: UIViewController {
         
             .receive(on: DispatchQueue.main)
             .sink { [weak self] images in
+                print("получено изображение :\(images.count)")
                 self?.collectionView.reloadData()
             }
             .store(in: &cancellables)
@@ -82,7 +83,7 @@ final class ImageGalleryViewController: UIViewController {
         viewModel.$isLoading
             .receive(on: DispatchQueue.main)
             .sink { isLoading in
-                print("Loading")
+                print("Loading state: \(isLoading)")
             }
             .store(in: &cancellables)
     }
