@@ -25,12 +25,11 @@ final class AppCoordinator {
         window.makeKeyAndVisible()
     }
     
-    func showDetailScreen(for images: [Images], startingAt index: Int) {
+    func showDetailScreen(for images: [Images], staringAt index: Int) {
         let detailAssembly = ImageDetailAssembly.assemble(
             images: images,
             initialIndex: index,
-            coordinator: self,
-            favoritesStorage: FavoritesStorage()
+            coordinator: self
         )
         navigationController.pushViewController(detailAssembly, animated: true)
     }

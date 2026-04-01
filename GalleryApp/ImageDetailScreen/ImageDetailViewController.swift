@@ -12,16 +12,7 @@ import Kingfisher
 final class ImageDetailViewController: UIViewController {
     
     private let viewModel: ImageDetailViewModel
-    private var currentIndex: Int
     private var cancellables: Set<AnyCancellable> = []
-    private let contentView: UIView = UIView()
-    
-    private let scrollView: UIScrollView = {
-        let scrollView = UIScrollView()
-        scrollView.isPagingEnabled = true
-        scrollView.showsHorizontalScrollIndicator = false
-        return scrollView
-    }()
     
     private let descriptionLabel: UILabel = {
         let label = UILabel()
@@ -30,7 +21,7 @@ final class ImageDetailViewController: UIViewController {
         label.layer.cornerRadius = 8
         label.clipsToBounds = true
         label.font = ImageDetailsConstants.Fonts.descriptionFont
-        label.numberOfLines = 0
+        label.numberOfLines = 2
         return label
     }()
     
@@ -39,23 +30,11 @@ final class ImageDetailViewController: UIViewController {
         imageView.contentMode = .scaleAspectFill
         imageView.backgroundColor = .black
         imageView.clipsToBounds = true
-        imageView.layer.cornerRadius = 8
         return imageView
-    }()
-    
-    private let likeButton: UIButton = {
-        let button = UIButton(type: .custom)
-        button.setImage(UIImage(systemName: "heart"), for: .normal)
-        button.setImage(UIImage(systemName: "heart.fill"), for: .selected)
-        button.tintColor = .systemRed
-        button.backgroundColor = UIColor.black.withAlphaComponent(0.4)
-        button.layer.cornerRadius = 16
-        return button
     }()
     
     init (viewModel: ImageDetailViewModel) {
         self.viewModel = viewModel
-        self.currentIndex = viewModel.currentImageIndex
         super.init (nibName: nil, bundle: nil)
     }
     
@@ -65,10 +44,9 @@ final class ImageDetailViewController: UIViewController {
     
     override func viewDidLoad () {
         super.viewDidLoad ()
-        view.backgroundColor = .systemBackground
+        view.backgroundColor = .red
         title = ImageDetailsConstants.Strings.imageDetailText
         setupUI()
-        bindViewModel()
         loadImage()
     }
     
@@ -80,35 +58,20 @@ final class ImageDetailViewController: UIViewController {
     private func setupUI () {
         view.addSubview(descriptionLabel)
         view.addSubview(imageView)
-        view.addSubview(likeButton)
-        
         imageView.translatesAutoresizingMaskIntoConstraints = false
         descriptionLabel.translatesAutoresizingMaskIntoConstraints = false
-        likeButton.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
-            imageView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            imageView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 16),
-            imageView.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.98),
-            imageView.heightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.heightAnchor, multiplier: 0.8),
-            
             descriptionLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            descriptionLabel.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 16),
-            descriptionLabel.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.98),
-            descriptionLabel.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -16),
+            descriptionLabel.topAnchor.constraint(equalTo: view.bottomAnchor, constant: -80),
+            descriptionLabel.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.8),
+            descriptionLabel.heightAnchor.constraint(equalToConstant: 50),
             
-            likeButton.topAnchor.constraint(equalTo: imageView.topAnchor, constant: 16),
-            likeButton.trailingAnchor.constraint(equalTo: imageView.trailingAnchor, constant: -16),
-            likeButton.widthAnchor.constraint(equalToConstant: 40),
-            likeButton.heightAnchor.constraint(equalToConstant: 40),
-            
+            imageView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            imageView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
+            imageView.widthAnchor.constraint(equalTo: view.widthAnchor),
+            imageView.bottomAnchor.constraint(equalTo: descriptionLabel.topAnchor, constant: -20)
         ])
-        
-        likeButton.addTarget(self, action: #selector(likeButtonPressed), for: .touchUpInside)
-    }
-    
-    private func bindViewModel() {
-        
     }
     
     func loadImage() {
@@ -117,7 +80,7 @@ final class ImageDetailViewController: UIViewController {
         descriptionLabel.text = image.displayDescription
         
         guard let urlString = image.urls.regularURL,
-              let url = URL(string: urlString) else {
+        let url = URL(string: urlString) else {
             imageView.image = UIImage(systemName: "photo")
             return
         }
@@ -126,11 +89,5 @@ final class ImageDetailViewController: UIViewController {
             placeholder: UIImage(systemName: "photo"),
             options: [ .transition(.fade(0.3)), .cacheOriginalImage]
         )
-    }
-    
-    @objc private func likeButtonPressed() {
-        let currentImage = viewModel.currentImage
-        viewModel.toggleFavorite(for: currentImage.id)
-        likeButton.isSelected.toggle()
     }
 }
