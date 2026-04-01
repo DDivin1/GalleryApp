@@ -10,7 +10,7 @@ import Combine
 
 final class ImageDetailViewModel {
     let images: [Images]
-    private(set) var currentImageIndex: Int
+    @Published var currentImageIndex: Int
     weak var coordinator: AppCoordinator?
     
    @Published var favoritesIDs: Set<String> = []
@@ -36,6 +36,11 @@ final class ImageDetailViewModel {
     func isFavorite(for imageID: String) -> Bool {
         return favoritesIDs.contains(imageID)
     }
+    
+    func setCurrentImageIndex(_ index: Int) {
+            guard index >= 0 && index < images.count else { return }
+            currentImageIndex = index
+        }
     
     func moveToNextImage() {
         guard currentImageIndex < images.count - 1 else { return }
