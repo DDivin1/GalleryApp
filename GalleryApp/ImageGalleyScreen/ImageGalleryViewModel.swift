@@ -89,6 +89,6 @@ final class ImageGalleryViewModel {
     
     func didSelectImage(at index: Int) {
         guard index < images.count else { return }
-        coordinator?.showDetailScreen(for: images, staringAt: index)
+        coordinator?.showDetailScreen(for: images, startingAt: index)
     }
 }
