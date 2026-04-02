@@ -8,6 +8,7 @@
 import UIKit
 
 final class FavoritesAssembly {
+    
     static func assemble(coordinator: AppCoordinator) -> UIViewController {
         
         let networkService = NetworkService()

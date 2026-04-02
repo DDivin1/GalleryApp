@@ -79,7 +79,8 @@ final class ImageGalleryViewModel {
     }
     
     func toggleFavorite(for imageID: String) {
-        favoritesStorage.toggleFavorite(id: imageID)
+        guard let image  = images.first(where: { $0.id == imageID }) else { return }
+        favoritesStorage.toggleFavorite(image)
         favoritesIDs = favoritesStorage.getAllFavoritesIds()
     }
     
