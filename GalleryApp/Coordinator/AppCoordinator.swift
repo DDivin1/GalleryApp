@@ -35,4 +35,9 @@ final class AppCoordinator {
         navigationController.pushViewController(detailAssembly, animated: true)
     }
     
+    func showFavoritesScreen() {
+        let favoritesAssembly = FavoritesAssembly.assemble(coordinator: self)
+        navigationController.pushViewController(favoritesAssembly, animated: true)
+    }
+    
 }

@@ -13,8 +13,6 @@ final class ImageDetailViewModel {
     @Published var currentImageIndex: Int
     weak var coordinator: AppCoordinator?
     
-   @Published var favoritesIDs: Set<String> = []
-    
     private let favoritesStorage: IFavoritesStorage
     
     var currentImage: Images {
@@ -25,16 +23,15 @@ final class ImageDetailViewModel {
         self.images = images
         self.currentImageIndex = initialIndex
         self.favoritesStorage = favoritesStorage
-        self.favoritesIDs = favoritesStorage.getAllFavoritesIds()
     }
     
     func toggleFavorite(for imageID: String) {
-        favoritesStorage.toggleFavorite(id: imageID)
-        favoritesIDs = favoritesStorage.getAllFavoritesIds()
+        guard let image  = images.first(where: { $0.id == imageID }) else { return }
+        favoritesStorage.toggleFavorite(image)
     }
     
     func isFavorite(for imageID: String) -> Bool {
-        return favoritesIDs.contains(imageID)
+        return favoritesStorage.isFavorite(id: imageID)
     }
     
     func setCurrentImageIndex(_ index: Int) {

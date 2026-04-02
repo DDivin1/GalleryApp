@@ -161,13 +161,6 @@ final class ImageDetailViewController: UIViewController {
                 self?.updateUI()
             }
             .store(in: &cancellables)
-        
-        viewModel.$favoritesIDs
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] _ in
-                self?.updateLikeButton()
-            }
-            .store(in: &cancellables)
     }
     
     private func updateUI() {

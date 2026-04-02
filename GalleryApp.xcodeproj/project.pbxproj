@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		354DD8012F7BCD78002329C8 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 354DD8002F7BCD78002329C8 /* Kingfisher */; };
+		354DD88F2F7E8AA4002329C8 /* GalleryDataModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 354DD88D2F7E8AA4002329C8 /* GalleryDataModel.xcdatamodeld */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -42,6 +43,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		354DD88E2F7E8AA4002329C8 /* GalleryDataModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = GalleryDataModel.xcdatamodel; sourceTree = "<group>"; };
 		355F06772F73DE2400050A1E /* GalleryApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GalleryApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		355F068D2F73DE2600050A1E /* GalleryAppTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GalleryAppTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		355F06972F73DE2600050A1E /* GalleryAppUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GalleryAppUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -118,6 +120,7 @@
 		355F066E2F73DE2400050A1E = {
 			isa = PBXGroup;
 			children = (
+				354DD88D2F7E8AA4002329C8 /* GalleryDataModel.xcdatamodeld */,
 				355F06792F73DE2400050A1E /* GalleryApp */,
 				355F078C2F753D7600050A1E /* GalleryAppTest */,
 				355F06782F73DE2400050A1E /* Products */,
@@ -367,6 +370,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				354DD88F2F7E8AA4002329C8 /* GalleryDataModel.xcdatamodeld in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -838,6 +842,19 @@
 			productName = Kingfisher;
 		};
 /* End XCSwiftPackageProductDependency section */
+
+/* Begin XCVersionGroup section */
+		354DD88D2F7E8AA4002329C8 /* GalleryDataModel.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				354DD88E2F7E8AA4002329C8 /* GalleryDataModel.xcdatamodel */,
+			);
+			currentVersion = 354DD88E2F7E8AA4002329C8 /* GalleryDataModel.xcdatamodel */;
+			path = GalleryDataModel.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = 355F066F2F73DE2400050A1E /* Project object */;
 }

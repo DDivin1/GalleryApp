@@ -9,4 +9,15 @@ import UIKit
 
 final class FavoritesAssembly {
     
+    static func assemble(coordinator: AppCoordinator) -> UIViewController {
+        
+        let networkService = NetworkService()
+        let favoritesStorage = FavoritesStorage()
+        
+        let viewModel = FavoritesViewModel(favoritesStorage: favoritesStorage, networkService: networkService)
+        
+        let viewController = FavoritesViewController(viewModel: viewModel)
+        viewModel.coordinator = coordinator
+        return viewController
+    }
 }
