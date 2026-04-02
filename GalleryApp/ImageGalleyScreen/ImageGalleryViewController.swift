@@ -20,6 +20,15 @@ final class ImageGalleryViewController: UIViewController {
         return indicator
     }()
     
+    private let favoritesButton: UIBarButtonItem = {
+        let button = UIBarButtonItem(image: UIImage(systemName: "star"),
+                                     style: .plain,
+                                     target: nil,
+                                     action: nil)
+        button.tintColor = .red
+        return button
+    }()
+    
     private let errorLabel: UILabel = {
         let label = UILabel()
         label.textColor = .secondaryLabel
@@ -59,6 +68,9 @@ final class ImageGalleryViewController: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
         title = ImageGalleryViewControllerConstants.Strings.galleryLabelText
+        navigationItem.rightBarButtonItem = favoritesButton
+        favoritesButton.target = self
+        favoritesButton.action = #selector(favoritesButtonPressed)
         setupCollectionView()
         setupStateViews()
         setupDataSourceAndDelegate()
@@ -192,6 +204,10 @@ final class ImageGalleryViewController: UIViewController {
     
     private func setupInfiniteScroll() {
         collectionView.delegate = self
+    }
+    
+    @objc func favoritesButtonPressed() {
+        viewModel.showFavorites()
     }
     
     @objc func imageTapped(_ sender: UITapGestureRecognizer) {

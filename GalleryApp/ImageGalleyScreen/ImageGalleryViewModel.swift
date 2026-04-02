@@ -74,6 +74,10 @@ final class ImageGalleryViewModel {
             .store(in: &cancellables)
     }
     
+    func showFavorites() {
+        coordinator?.showFavoritesScreen()
+    }
+    
     func toggleFavorite(for imageID: String) {
         favoritesStorage.toggleFavorite(id: imageID)
         favoritesIDs = favoritesStorage.getAllFavoritesIds()
