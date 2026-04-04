@@ -15,8 +15,7 @@ final class ImageGalleryViewModel {
     @Published var isLoading: Bool = false
     @Published var isLoadingMore: Bool = false
     @Published var errorMessage: String?
-    
-    var favoritesIDs: Set<String> = []
+    @Published var favoritesIDs: Set<String> = []
     
     private let networkService: INetworkService
     private let favoritesStorage: IFavoritesStorage
@@ -29,6 +28,10 @@ final class ImageGalleryViewModel {
         self.networkService = networkService
         self.favoritesStorage = favoritesStorage
         self.favoritesIDs = favoritesStorage.getAllFavoritesIds()
+    }
+    
+    func refreshFavoriteState() {
+        favoritesIDs = favoritesStorage.getAllFavoritesIds()
     }
     
     func loadInitialImages() {

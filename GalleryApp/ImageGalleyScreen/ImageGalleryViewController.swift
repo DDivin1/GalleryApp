@@ -25,7 +25,7 @@ final class ImageGalleryViewController: UIViewController {
                                      style: .plain,
                                      target: nil,
                                      action: nil)
-        button.tintColor = .red
+        button.tintColor = .black
         return button
     }()
     
@@ -77,6 +77,12 @@ final class ImageGalleryViewController: UIViewController {
         setupInfiniteScroll()
         bindViewModel()
         viewModel.loadInitialImages()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        viewModel.refreshFavoriteState()
+        collectionView.reloadData()
     }
     
     private func setupCollectionView() {
@@ -144,7 +150,6 @@ final class ImageGalleryViewController: UIViewController {
         viewModel.$images
             .receive(on: DispatchQueue.main)
             .sink { [weak self] images in
-                print("получено изображение :\(images.count)")
                 self?.collectionView.reloadData()
                 self?.updateStateViews(
                     isLoading: false,
@@ -154,10 +159,16 @@ final class ImageGalleryViewController: UIViewController {
             }
             .store(in: &cancellables)
         
+        viewModel.$favoritesIDs
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] _ in
+                self?.collectionView.reloadData()
+            }
+            .store(in: &cancellables)
+        
         viewModel.$isLoading
             .receive(on: DispatchQueue.main)
             .sink { [weak self] isLoading in
-                print("Loading state: \(isLoading)")
                 self?.updateStateViews(
                     isLoading: isLoading,
                     hasError: self?.viewModel.errorMessage != nil,

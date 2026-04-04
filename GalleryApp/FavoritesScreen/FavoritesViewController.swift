@@ -14,6 +14,23 @@ final class FavoritesViewController: UIViewController {
     private var collectionView: UICollectionView!
     private var cancellables: Set<AnyCancellable> = []
     
+    private let loadingIndicator: UIActivityIndicatorView = {
+        let indicator = UIActivityIndicatorView(style: .large)
+        indicator.hidesWhenStopped = true
+        return indicator
+    }()
+    
+    private let emptyLabel: UILabel = {
+        let label = UILabel()
+        label.textAlignment = .center
+        label.textColor = .secondaryLabel
+        label.font = .systemFont(ofSize: 18, weight: .regular)
+        label.numberOfLines = 0
+        label.isHidden = true
+        label.text = "No favorites yet"
+        return label
+    }()
+    
     
     init(viewModel: FavoritesViewModel) {
         self.viewModel = viewModel
@@ -30,11 +47,20 @@ final class FavoritesViewController: UIViewController {
         view.backgroundColor = .systemBackground
         setupCollectionView()
         bindViewModel()
+        setupEmptyLabel()
         viewModel.loadFavorites()
-        
-    }
+        }
     
     private func setupCollectionView() {
+        
+        view.addSubview(loadingIndicator)
+        loadingIndicator.translatesAutoresizingMaskIntoConstraints = false
+        
+        NSLayoutConstraint.activate([
+            loadingIndicator.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            loadingIndicator.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+        ])
+        
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
         layout.minimumLineSpacing = 10
@@ -67,17 +93,34 @@ final class FavoritesViewController: UIViewController {
     private func bindViewModel() {
         viewModel.$favoritesImages
             .receive(on: DispatchQueue.main)
-            .sink { [weak self] _ in
+            .sink { [weak self] images in
                 self?.collectionView.reloadData()
+                self?.emptyLabel.isHidden = !images.isEmpty
             }
             .store(in: &cancellables)
         
         viewModel.$isLoading
             .receive(on: DispatchQueue.main)
             .sink { [weak self] isLoading in
-                print("Loading: \(isLoading)")
+                if isLoading {
+                    self?.loadingIndicator.startAnimating()
+                } else {
+                    self?.loadingIndicator.stopAnimating()
+                }
             }
             .store(in: &cancellables)
+    }
+    
+    private func setupEmptyLabel() {
+        view.addSubview(emptyLabel)
+        emptyLabel.translatesAutoresizingMaskIntoConstraints = false
+        
+        NSLayoutConstraint.activate([
+            emptyLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            emptyLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            emptyLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -40),
+            emptyLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 40)
+        ])
     }
 }
 

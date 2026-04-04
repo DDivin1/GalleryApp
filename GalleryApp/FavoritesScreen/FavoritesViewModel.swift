@@ -17,11 +17,9 @@ final class FavoritesViewModel {
     weak var coordinator: AppCoordinator?
     
     private let favoritesStorage: IFavoritesStorage
-    private let networkService: INetworkService
     
-    init(favoritesStorage: IFavoritesStorage, networkService: INetworkService) {
+    init(favoritesStorage: IFavoritesStorage) {
         self.favoritesStorage = favoritesStorage
-        self.networkService = networkService
     }
     
     func loadFavorites() {
