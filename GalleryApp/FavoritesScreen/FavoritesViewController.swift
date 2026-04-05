@@ -23,11 +23,11 @@ final class FavoritesViewController: UIViewController {
     private let emptyLabel: UILabel = {
         let label = UILabel()
         label.textAlignment = .center
-        label.textColor = .secondaryLabel
-        label.font = .systemFont(ofSize: 18, weight: .regular)
+        label.textColor = FavoritesScreenConstants.Colors.secondaryLabel
+        label.font = FavoritesScreenConstants.Fonts.emptyLabelFont
         label.numberOfLines = 0
         label.isHidden = true
-        label.text = "No favorites yet"
+        label.text = FavoritesScreenConstants.Strings.emptyLabelText
         return label
     }()
     
@@ -43,7 +43,7 @@ final class FavoritesViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        title = "Favorites"
+        title = FavoritesScreenConstants.Strings.title
         view.backgroundColor = .systemBackground
         setupCollectionView()
         bindViewModel()
@@ -63,15 +63,15 @@ final class FavoritesViewController: UIViewController {
         
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
-        layout.minimumLineSpacing = 10
-        layout.minimumInteritemSpacing = 10
-        layout.sectionInset = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
+        layout.minimumLineSpacing = FavoritesScreenConstants.Layout.minimumLineSpacing
+        layout.minimumInteritemSpacing = FavoritesScreenConstants.Layout.minimumInteritemSpacing
+        layout.sectionInset = FavoritesScreenConstants.Layout.sectionInset
         
-        let padding: CGFloat = 10
+        let padding: CGFloat = FavoritesScreenConstants.Layout.padding
         let avalibleWidth = UIScreen.main.bounds.width - (padding * 2) - 10
-        let itemWidth = avalibleWidth / 2
+        let itemWidth = avalibleWidth / FavoritesScreenConstants.Ints.numberOfColumns
         
-        layout.itemSize = CGSize(width: itemWidth, height: itemWidth * 1.4)
+        layout.itemSize = CGSize(width: itemWidth, height: itemWidth * FavoritesScreenConstants.Ints.itemHeightRatio)
         
         collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.register(ImageGalleryCell.self, forCellWithReuseIdentifier: ImageGalleryCell.identifier)
@@ -118,8 +118,10 @@ final class FavoritesViewController: UIViewController {
         NSLayoutConstraint.activate([
             emptyLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             emptyLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor),
-            emptyLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -40),
-            emptyLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 40)
+            emptyLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor,
+                                                 constant: FavoritesScreenConstants.Layout.trailingConstant),
+            emptyLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor,
+                                                constant: FavoritesScreenConstants.Layout.leadingConstant)
         ])
     }
 }
@@ -149,10 +151,10 @@ extension FavoritesViewController: UICollectionViewDataSource {
             let imageToRemove = self.viewModel.favoritesImages[indexPath.item]
             self.viewModel.removeFromFavorites(imageID: imageToRemove.id)
         }
-        
         return cell
     }
 }
 
 extension FavoritesViewController: UICollectionViewDelegate {
+    
 }

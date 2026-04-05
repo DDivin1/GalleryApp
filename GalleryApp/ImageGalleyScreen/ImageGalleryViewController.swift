@@ -21,7 +21,7 @@ final class ImageGalleryViewController: UIViewController {
     }()
     
     private let favoritesButton: UIBarButtonItem = {
-        let button = UIBarButtonItem(image: UIImage(systemName: "star"),
+        let button = UIBarButtonItem(image: UIImage(systemName: ImageGalleryViewControllerConstants.Strings.favoritesButtonName),
                                      style: .plain,
                                      target: nil,
                                      action: nil)
@@ -31,9 +31,9 @@ final class ImageGalleryViewController: UIViewController {
     
     private let errorLabel: UILabel = {
         let label = UILabel()
-        label.textColor = .secondaryLabel
+        label.textColor = ImageGalleryViewControllerConstants.Colors.secondaryLabel
         label.textAlignment = .center
-        label.font = .systemFont(ofSize: 16)
+        label.font = ImageGalleryViewControllerConstants.Fonts.errorLabelFont
         label.numberOfLines = 0
         label.isHidden = true
         return label
@@ -42,9 +42,9 @@ final class ImageGalleryViewController: UIViewController {
     private let emptyLabel: UILabel = {
         let label = UILabel()
         label.text = ImageGalleryViewControllerConstants.Strings.emptyLabelText
-        label.textColor = .secondaryLabel
+        label.textColor = ImageGalleryViewControllerConstants.Colors.secondaryLabel
         label.textAlignment = .center
-        label.font = .systemFont(ofSize: 18)
+        label.font = ImageGalleryViewControllerConstants.Fonts.emptyLabelFont
         label.isHidden = true
         return label
     }()
@@ -96,9 +96,10 @@ final class ImageGalleryViewController: UIViewController {
         let padding: CGFloat = ImageGalleryViewControllerConstants.Layout.padding
         let interItemSpacing: CGFloat = ImageGalleryViewControllerConstants.Layout.itemSpacing
         let avalibleWidth = UIScreen.main.bounds.width - padding * 2 - interItemSpacing
-        let itemWidth = avalibleWidth / 2
+        let itemWidth = avalibleWidth / ImageGalleryViewControllerConstants.Ints.numberOfColumns
         
-        layout.itemSize = CGSize(width: itemWidth, height: itemWidth * 1.4)
+        layout.itemSize = CGSize(width: itemWidth,
+                                 height: itemWidth * ImageGalleryViewControllerConstants.Ints.itemHeightRatio)
         
         collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.register(ImageGalleryCell.self, forCellWithReuseIdentifier: ImageGalleryCell.identifier)
@@ -132,8 +133,10 @@ final class ImageGalleryViewController: UIViewController {
             
             errorLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             errorLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor),
-            errorLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 40),
-            errorLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -40),
+            errorLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor,
+                                                constant: ImageGalleryViewControllerConstants.Layout.errorLabelLeadingConstant),
+            errorLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor,
+                                                 constant: ImageGalleryViewControllerConstants.Layout.errorLabelTrailingConstant),
             
             emptyLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             emptyLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor)

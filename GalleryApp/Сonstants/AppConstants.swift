@@ -24,5 +24,6 @@ enum AppConstants {
     
     enum Strings {
         static let favoritesKey: String = "favoritesImagesIds"
+        static let containerName: String = "GalleryDataModel"
     }
 }
