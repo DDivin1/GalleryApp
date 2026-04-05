@@ -9,9 +9,7 @@ import Foundation
 import Combine
 
 protocol INetworkService{
-    
     func fetchImages(page: Int, perPage: Int) -> AnyPublisher<[Images], Error>
-    
 }
 
 final class NetworkService: INetworkService {
@@ -34,6 +32,5 @@ final class NetworkService: INetworkService {
             .mapError { $0 as Error}
             .eraseToAnyPublisher()
     }
-    
 }
 

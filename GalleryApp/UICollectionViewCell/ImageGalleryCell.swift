@@ -23,11 +23,11 @@ final class ImageGalleryCell: UICollectionViewCell {
     
     private let likeButton: UIButton = {
         let button = UIButton(type: .custom)
-        button.setImage(UIImage(systemName: "heart"), for: .normal)
-        button.setImage(UIImage(systemName: "heart.fill"), for: .selected)
-        button.tintColor = .systemRed
-        button.backgroundColor = UIColor.black.withAlphaComponent(0.4)
-        button.layer.cornerRadius = 16
+        button.setImage(UIImage(systemName: ImageCellConstants.Strings.heart), for: .normal)
+        button.setImage(UIImage(systemName: ImageCellConstants.Strings.heartFill), for: .selected)
+        button.tintColor = ImageCellConstants.Colors.systemRed
+        button.backgroundColor = ImageCellConstants.Colors.likeButtonBackground
+        button.layer.cornerRadius = ImageCellConstants.Layout.likeCornerRadius
         return button
     }()
     
@@ -53,10 +53,12 @@ final class ImageGalleryCell: UICollectionViewCell {
             imagesImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             imagesImageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
             
-            likeButton.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 8),
-            likeButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -8),
-            likeButton.widthAnchor.constraint(equalToConstant: 32),
-            likeButton.heightAnchor.constraint(equalToConstant: 32)
+            likeButton.topAnchor.constraint(equalTo: contentView.topAnchor,
+                                            constant: ImageCellConstants.Layout.likeButtonTop),
+            likeButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor,
+                                                 constant: ImageCellConstants.Layout.likeButtonTrailing),
+            likeButton.widthAnchor.constraint(equalToConstant: ImageCellConstants.Layout.likeButtonSize),
+            likeButton.heightAnchor.constraint(equalToConstant: ImageCellConstants.Layout.likeButtonSize)
         ])
         
         likeButton.addTarget(self, action: #selector(likeButtonPressed), for: .touchUpInside)
@@ -69,7 +71,7 @@ final class ImageGalleryCell: UICollectionViewCell {
         if let thumbURLString = image.urls.thumbURL, let url = URL(string: thumbURLString) {
             imagesImageView.kf.setImage(
                 with: url,
-                placeholder: UIImage(systemName: "photo"),
+                placeholder: UIImage(systemName: ImageCellConstants.Strings.placeholder),
                 options: [.transition(.fade(0.3)), .cacheOriginalImage]
             )
         }

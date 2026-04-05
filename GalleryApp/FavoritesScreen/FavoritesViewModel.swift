@@ -17,11 +17,9 @@ final class FavoritesViewModel {
     weak var coordinator: AppCoordinator?
     
     private let favoritesStorage: IFavoritesStorage
-    private let networkService: INetworkService
     
-    init(favoritesStorage: IFavoritesStorage, networkService: INetworkService) {
+    init(favoritesStorage: IFavoritesStorage) {
         self.favoritesStorage = favoritesStorage
-        self.networkService = networkService
     }
     
     func loadFavorites() {
@@ -35,6 +33,11 @@ final class FavoritesViewModel {
             favoritesStorage.toggleFavorite(imageToRemove)
             loadFavorites()
         }
+    }
+    
+    func didSelectImage(at index: Int) {
+        guard index < favoritesImages.count else { return }
+        coordinator?.showDetailScreen(for: favoritesImages, startingAt: index)
     }
     
     func isFavorite(imageID: String) -> Bool {

@@ -9,10 +9,11 @@ import Foundation
 import Combine
 
 final class ImageDetailViewModel {
+    
     let images: [Images]
     @Published var currentImageIndex: Int
-    weak var coordinator: AppCoordinator?
     
+    weak var coordinator: AppCoordinator?
     private let favoritesStorage: IFavoritesStorage
     
     var currentImage: Images {
