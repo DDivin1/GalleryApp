@@ -124,6 +124,14 @@ final class FavoritesViewController: UIViewController {
                                                 constant: FavoritesScreenConstants.Layout.leadingConstant)
         ])
     }
+    
+    @objc private func imageTapped(_ sender: UITapGestureRecognizer) {
+        guard let cell = sender.view as? ImageGalleryCell,
+              let indexPath = collectionView.indexPath(for: cell) else {
+            return
+        }
+        viewModel.didSelectImage(at: indexPath.item)
+    }
 }
 
 extension FavoritesViewController: UICollectionViewDataSource {
@@ -151,6 +159,8 @@ extension FavoritesViewController: UICollectionViewDataSource {
             let imageToRemove = self.viewModel.favoritesImages[indexPath.item]
             self.viewModel.removeFromFavorites(imageID: imageToRemove.id)
         }
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(imageTapped(_:)))
+        cell.addGestureRecognizer(tapGesture)
         return cell
     }
 }

@@ -35,6 +35,11 @@ final class FavoritesViewModel {
         }
     }
     
+    func didSelectImage(at index: Int) {
+        guard index < favoritesImages.count else { return }
+        coordinator?.showDetailScreen(for: favoritesImages, startingAt: index)
+    }
+    
     func isFavorite(imageID: String) -> Bool {
         return favoritesStorage.isFavorite(id: imageID)
     }
