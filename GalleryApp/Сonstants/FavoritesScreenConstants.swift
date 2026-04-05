@@ -10,8 +10,8 @@ import UIKit
 enum FavoritesScreenConstants {
    
     enum Strings {
-        static let title = "Favorites"
-        static let emptyLabelText: String = "No favorites yet"
+        static let title = "Favorites".localized
+        static let emptyLabelText: String = "No favorites yet".localized
     }
     
     enum Colors {

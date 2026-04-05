@@ -36,9 +36,8 @@ enum ImageGalleryViewControllerConstants {
     }
     
     enum Strings {
-        static let galleryLabelText: String = "Gallery"
-        static let emptyLabelText: String = "No images found"
-        static let imageDetailText: String = "Image Detail"
+        static let galleryLabelText: String = "Gallery".localized
+        static let emptyLabelText: String = "No images found".localized
         static let favoritesButtonName: String = "star"
     }
 }

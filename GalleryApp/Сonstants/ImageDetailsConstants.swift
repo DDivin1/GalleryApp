@@ -9,7 +9,7 @@ import UIKit
 
 final class ImageDetailsConstants {
     enum Strings {
-        static let imageDetailText: String = "Image Detail"
+        static let imageDetailText: String = "Image Detail".localized
         static let heart: String = "heart"
         static let heartFill: String = "heart.fill"
         static let photo: String = "photo"
