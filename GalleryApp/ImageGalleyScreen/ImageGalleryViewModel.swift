@@ -9,6 +9,7 @@ import UIKit
 
 final class ImageGalleryViewModel {
     
+    // MARK: - Public Properties
     weak var coordinator: AppCoordinator?
     
     @Published var images: [Images] = []
@@ -17,6 +18,7 @@ final class ImageGalleryViewModel {
     @Published var errorMessage: String?
     @Published var favoritesIDs: Set<String> = []
     
+    // MARK: - Private Properties
     private let networkService: INetworkService
     private let favoritesStorage: IFavoritesStorage
     
@@ -24,12 +26,14 @@ final class ImageGalleryViewModel {
     private var canLoadMore: Bool = true
     private var cancellables: Set<AnyCancellable> = []
 
+    // MARK: - Initialization
     init (networkService: INetworkService, favoritesStorage: IFavoritesStorage) {
         self.networkService = networkService
         self.favoritesStorage = favoritesStorage
         self.favoritesIDs = favoritesStorage.getAllFavoritesIds()
     }
     
+    // MARK: - Public Methods
     func refreshFavoriteState() {
         favoritesIDs = favoritesStorage.getAllFavoritesIds()
     }

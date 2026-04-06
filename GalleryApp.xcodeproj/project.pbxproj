@@ -146,7 +146,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 355F06A02F73DE2600050A1E /* Build configuration list for PBXNativeTarget "GalleryApp" */;
 			buildPhases = (
-				355F07432F7429D000050A1E /* ShellScript */,
+				355F07432F7429D000050A1E /* SwiftLint */,
 				355F06732F73DE2400050A1E /* Sources */,
 				355F06742F73DE2400050A1E /* Frameworks */,
 				355F06752F73DE2400050A1E /* Resources */,
@@ -347,8 +347,9 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		355F07432F7429D000050A1E /* ShellScript */ = {
+		355F07432F7429D000050A1E /* SwiftLint */ = {
 			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
 			buildActionMask = 2147483647;
 			files = (
 			);
@@ -356,13 +357,14 @@
 			);
 			inputPaths = (
 			);
+			name = SwiftLint;
 			outputFileListPaths = (
 			);
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# SwiftLint\nif which swiftlint >/dev/null; then\n    swiftlint --config \"${SRCROOT}/.swiftlint.yml\" --quiet\nelse\n    echo \"warning: SwiftLint is not installed. Install with: brew install swiftlint\"\nfi\n";
+			shellScript = "# SwiftLint\nexport PATH=\"/opt/homebrew/bin:/usr/local/bin:$PATH\"\n\nif which swiftlint >/dev/null; then\n    swiftlint --config \"${SRCROOT}/.swiftlint.yml\" --quiet\nelse\n    echo \"warning: SwiftLint not found. Run: brew install swiftlint\"\nfi\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -437,6 +439,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = NM9R56YKJ6;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = GalleryApp/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -469,6 +472,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = NM9R56YKJ6;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = GalleryApp/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;

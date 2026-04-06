@@ -11,10 +11,12 @@ import Kingfisher
 
 final class ImageDetailViewController: UIViewController {
     
+    // MARK: - Properties
     private let viewModel: ImageDetailViewModel
     private var cancellables: Set<AnyCancellable> = []
     private var didSetupPages = false
     
+    // MARK: - UI Elements
     private let scrollView: UIScrollView = {
         let scrollView = UIScrollView()
         scrollView.isPagingEnabled = true
@@ -43,17 +45,19 @@ final class ImageDetailViewController: UIViewController {
         return button
     }()
     
+    // MARK: - Initialization
     init (viewModel: ImageDetailViewModel) {
         self.viewModel = viewModel
-        super.init (nibName: nil, bundle: nil)
+        super.init(nibName: nil, bundle: nil)
     }
     
     required init? (coder: NSCoder) {
-        fatalError ("init(coder:) has not been implemented")
+        fatalError("init(coder:) has not been implemented")
     }
     
-    override func viewDidLoad () {
-        super.viewDidLoad ()
+    // MARK: - Lifecycle
+    override func viewDidLoad() {
+        super.viewDidLoad()
         view.backgroundColor = .systemBackground
         title = ImageDetailsConstants.Strings.imageDetailText
         setupUI()
@@ -69,7 +73,8 @@ final class ImageDetailViewController: UIViewController {
         scrollToCurrentPage()
     }
     
-    private func setupUI () {
+    // MARK: - Setup
+    private func setupUI() {
         view.addSubview(scrollView)
         view.addSubview(descriptionLabel)
         view.addSubview(likeButton)
@@ -98,7 +103,7 @@ final class ImageDetailViewController: UIViewController {
             likeButton.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor,
                                                  constant: ImageDetailsConstants.Layout.defaultInset),
             likeButton.widthAnchor.constraint(equalToConstant: ImageDetailsConstants.Layout.likeButtonSize),
-            likeButton.heightAnchor.constraint(equalToConstant: ImageDetailsConstants.Layout.likeButtonSize),
+            likeButton.heightAnchor.constraint(equalToConstant: ImageDetailsConstants.Layout.likeButtonSize)
             
         ])
         likeButton.addTarget(self, action: #selector(likeButtonPressed), for: .touchUpInside)
@@ -161,6 +166,7 @@ final class ImageDetailViewController: UIViewController {
         scrollView.setContentOffset(CGPoint(x: offsetX, y: 0), animated: false)
     }
     
+    // MARK: - Binding & Updates
     private func bindViewModel() {
         viewModel.$currentImageIndex
             .receive(on: DispatchQueue.main)
@@ -181,6 +187,7 @@ final class ImageDetailViewController: UIViewController {
         likeButton.isSelected = viewModel.isFavorite(for: image.id)
     }
     
+    // MARK: - Actions
     @objc private func likeButtonPressed() {
         let currentImage = viewModel.currentImage
         viewModel.toggleFavorite(for: currentImage.id)
@@ -188,7 +195,7 @@ final class ImageDetailViewController: UIViewController {
     }
 }
 
-
+// MARK: - UIScrollViewDelegate
 extension ImageDetailViewController: UIScrollViewDelegate {
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         let pageWidth = scrollView.bounds.width

@@ -10,18 +10,22 @@ import Combine
 
 final class FavoritesViewModel {
     
+    // MARK: - Public Properties
     @Published var favoritesImages: [Images] = []
     @Published var isLoading: Bool = false
     @Published var errorMessage: String?
     
     weak var coordinator: AppCoordinator?
     
+    // MARK: - Private Properties
     private let favoritesStorage: IFavoritesStorage
     
+    // MARK: - Initialization
     init(favoritesStorage: IFavoritesStorage) {
         self.favoritesStorage = favoritesStorage
     }
     
+    // MARK: - Public Methods
     func loadFavorites() {
         isLoading = true
         favoritesImages = favoritesStorage.getAllFavorites()
