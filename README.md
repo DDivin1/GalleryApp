@@ -31,15 +31,20 @@ Swit, UIKit, Combine, CoreData
 ## Architecture
 
 ### MVVM + Coordinator
-AppCoordinator
+┌─────────────────┐
+│ AppCoordinator │
+└────────┬────────┘
+│
+┌─────────────────┼─────────────────┐
 ▼ ▼ ▼
-    │ Gallery │      │ Detail │       │ Favorites │
-    │ Module │       │ Module │        │ Module │
-├───────────────┤ ├───────────────┤ ├───────────────┤
-   │ • View │       │ • View │        │ • View │
-│ • ViewModel │   │ • ViewModel │    │ • ViewModel │
-│ • Assembly │    │ • Assembly │     │ • Assembly │
-
+┌─────────────┐ ┌─────────────┐ ┌─────────────┐
+│ Gallery │ │ Detail │ │ Favorites │
+│ Module │ │ Module │ │ Module │
+├─────────────┤ ├─────────────┤ ├─────────────┤
+│ • View │ │ • View │ │ • View │
+│ • ViewModel │ │ • ViewModel │ │ • ViewModel │
+│ • Assembly │ │ • Assembly │ │ • Assembly │
+└─────────────┘ └─────────────┘ └─────────────┘
 
 ### Technology Stack
 
@@ -68,48 +73,59 @@ AppCoordinator
 ## Project Structure
 GalleryApp/
 ├── App+coordinator/
-│   ├── AppDelegate.swift
-│   ├── SceneDelegate.swift
-│   └── AppCoordinator.swift
-│── ImageGallery/
-│   ├── View/
-│   ├── ViewModel/
-│   └── Assembly/
-│── ImageDetail/
-│   ├── View/
-│   ├── ViewModel/
-│   └── Assembly/
-│── Favorites/
-│   ├── View/
-│   ├── ViewModel/
-│   └── Assembly/
-├── Extecions/
-│   └── Strings+extencions.swift
+│ ├── AppDelegate.swift
+│ ├── SceneDelegate.swift
+│ └── AppCoordinator.swift
+│
+├── ImageGallery/
+│ ├── View/
+│ ├── ViewModel/
+│ └── Assembly/
+│
+├── ImageDetail/
+│ ├── View/
+│ ├── ViewModel/
+│ └── Assembly/
+│
+├── Favorites/
+│ ├── View/
+│ ├── ViewModel/
+│ └── Assembly/
+│
+├── Extensions/
+│ └── Strings+extensions.swift
+│
 ├── Services/
-│   └── NetworkService.swift
-│   └── FavoritesStorage.swift
+│ ├── NetworkService.swift
+│ └── FavoritesStorage.swift
+│
 ├── UICollectionViewCell/
-│   └── ImageGalleryViewCell.swift
+│ └── ImageGalleryViewCell.swift
+│
 ├── Manager/
-│   └── CoreDataManager.swift
-│── Constants/
-│  ├── AppConstants.swift
-│  ├── ImageGalleryViewControllerConstants.swift
-│  ├── ImageDetailsConstants.swift
-│  ├── ImageCellConstants.swift
-│  └── FavoritesScreenConstants.swift
-│── Models/
-│       └── Images.swift
+│ └── CoreDataManager.swift
+│
+├── Constants/
+│ ├── AppConstants.swift
+│ ├── ImageGalleryViewControllerConstants.swift
+│ ├── ImageDetailsConstants.swift
+│ ├── ImageCellConstants.swift
+│ └── FavoritesScreenConstants.swift
+│
+├── Models/
+│ └── Images.swift
+│
 ├── Resources/
-│   ├── Assets.xcassets
-│   ├── Localizable.strings
-│   └── GalleryDataModel.xcdatamodeld
+│ ├── Assets.xcassets
+│ ├── Localizable.strings
+│ └── GalleryDataModel.xcdatamodeld
+│
 └── GalleryAppTests/
 ├── Mocks/
-│    ├── NetworkServiceStub.swift
-│    └── FavoritesStorageMock.swift
-├── UnitTests/
-│    └── GalleryAppTest.swift
+│ ├── NetworkServiceStub.swift
+│ └── FavoritesStorageMock.swift
+└── UnitTests/
+└── GalleryAppTest.swift
 
 ## Setup & Configuration
 
