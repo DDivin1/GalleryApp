@@ -33,7 +33,7 @@ Swit, UIKit, Combine, CoreData
 ### MVVM + Coordinator
 
                     ┌─────────────────┐
-                    │  AppCoordinator  │
+                    │  AppCoordinator │
                     └────────┬────────┘
                              │
            ┌─────────────────┼─────────────────┐
