@@ -75,59 +75,63 @@ Swit, UIKit, Combine, CoreData
 ## Project Structure
 GalleryApp/
 ├── App+coordinator/
-│ ├── AppDelegate.swift
-│ ├── SceneDelegate.swift
-│ └── AppCoordinator.swift
+│   ├── AppDelegate.swift
+│   ├── SceneDelegate.swift
+│   └── AppCoordinator.swift
 │
-├── ImageGallery/
-│ ├── View/
-│ ├── ViewModel/
-│ └── Assembly/
+├── Modules/
+│   ├── ImageGallery/
+│   │   ├── View/
+│   │   ├── ViewModel/
+│   │   └── Assembly/
+│   │
+│   ├── ImageDetail/
+│   │   ├── View/
+│   │   ├── ViewModel/
+│   │   └── Assembly/
+│   │
+│   └── Favorites/
+│       ├── View/
+│       ├── ViewModel/
+│       └── Assembly/
 │
-├── ImageDetail/
-│ ├── View/
-│ ├── ViewModel/
-│ └── Assembly/
+├── Core/
+│   ├── Services/
+│   │   ├── NetworkService.swift
+│   │   └── FavoritesStorage.swift
+│   │
+│   └── Manager/
+│       └── CoreDataManager.swift
 │
-├── Favorites/
-│ ├── View/
-│ ├── ViewModel/
-│ └── Assembly/
+├── Common/
+│   ├── Constants/
+│   │   ├── AppConstants.swift
+│   │   ├── ImageGalleryViewControllerConstants.swift
+│   │   ├── ImageDetailsConstants.swift
+│   │   ├── ImageCellConstants.swift
+│   │   └── FavoritesScreenConstants.swift
+│   │
+│   ├── Models/
+│   │   └── Images.swift
+│   │
+│   └── Extensions/
+│       └── Strings+extensions.swift
 │
-├── Extensions/
-│ └── Strings+extensions.swift
-│
-├── Services/
-│ ├── NetworkService.swift
-│ └── FavoritesStorage.swift
-│
-├── UICollectionViewCell/
-│ └── ImageGalleryViewCell.swift
-│
-├── Manager/
-│ └── CoreDataManager.swift
-│
-├── Constants/
-│ ├── AppConstants.swift
-│ ├── ImageGalleryViewControllerConstants.swift
-│ ├── ImageDetailsConstants.swift
-│ ├── ImageCellConstants.swift
-│ └── FavoritesScreenConstants.swift
-│
-├── Models/
-│ └── Images.swift
+├── UI/
+│   └── Cells/
+│       └── ImageGalleryCell.swift
 │
 ├── Resources/
-│ ├── Assets.xcassets
-│ ├── Localizable.strings
-│ └── GalleryDataModel.xcdatamodeld
+│   ├── Assets.xcassets
+│   ├── Localizable.strings
+│   └── GalleryDataModel.xcdatamodeld
 │
 └── GalleryAppTests/
-├── Mocks/
-│ ├── NetworkServiceStub.swift
-│ └── FavoritesStorageMock.swift
-└── UnitTests/
-└── GalleryAppTest.swift
+    ├── Mocks/
+    │   ├── NetworkServiceStub.swift
+    │   └── FavoritesStorageMock.swift
+    └── UnitTests/
+        └── GalleryAppTest.swift
 
 ## Setup & Configuration
 
