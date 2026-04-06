@@ -7,8 +7,10 @@
 
 @testable import GalleryApp
 
+// MARK: - FavoritesStorageMock
 final class FavoritesStorageMock: IFavoritesStorage {
     
+    // MARK: - Properties
     var getAllFavoritesCalled = false
     var toggleFavoriteCalled = false
     var isFavoriteCalled = false
@@ -17,6 +19,7 @@ final class FavoritesStorageMock: IFavoritesStorage {
     var mockFavorites: [Images] = []
     var mockFavoritesIds: Set<String> = []
     
+    // MARK: - IFavoritesStorage Methods
     func getAllFavorites() -> [Images] {
         getAllFavoritesCalled = true
         return mockFavorites
@@ -36,6 +39,7 @@ final class FavoritesStorageMock: IFavoritesStorage {
         return mockFavoritesIds
     }
     
+    // MARK: - Helpers
     func setMocksFavorites(_ favorites: [Images]) {
         self.mockFavorites = favorites
     }

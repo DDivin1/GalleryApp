@@ -9,14 +9,17 @@ import UIKit
 
 final class AppCoordinator {
     
+    // MARK: - Private Properties
     private let window: UIWindow
     private let navigationController: UINavigationController
     
+    // MARK: - Initialization
     init (window: UIWindow) {
         self.window = window
         self.navigationController = UINavigationController()
     }
     
+    // MARK: - Public Methods
     func start() {
         let galleryVC = ImageGalleryAssembly.assemble(coordinator: self)
         navigationController.setViewControllers([galleryVC], animated: false)

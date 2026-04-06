@@ -35,6 +35,4 @@ enum FavoritesScreenConstants {
         static let trailingConstant: CGFloat = -40
         static let leadingConstant: CGFloat = 40
     }
-    
-    
 }

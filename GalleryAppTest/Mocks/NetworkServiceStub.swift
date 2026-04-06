@@ -9,12 +9,14 @@
 import Combine
 import Foundation
 
+// MARK: - NetworkServiceStub
 final class NetworkServiceStub: INetworkService {
     var fetchImageResult: Result<[Images], Error>?
     var fetchImagesCalled = false
     var lastPage: Int?
     var lastPerPage: Int?
     
+    // MARK: - Public Methods
     func fetchImages(page: Int, perPage: Int) -> AnyPublisher<[Images], Error> {
         fetchImagesCalled = true
         lastPage = page
@@ -23,8 +25,8 @@ final class NetworkServiceStub: INetworkService {
         guard let result = fetchImageResult else {
             return Fail(error: URLError(.badServerResponse)).eraseToAnyPublisher()
         }
-        switch result{
-            case .success(let images):
+        switch result {
+        case .success(let images):
             return Just(images)
                 .setFailureType(to: Error.self)
                 .eraseToAnyPublisher()
@@ -33,6 +35,7 @@ final class NetworkServiceStub: INetworkService {
         }
     }
     
+    // MARK: - Helpers
     func setSuccessResult(_ images: [Images]) {
         fetchImageResult = .success(images)
     }

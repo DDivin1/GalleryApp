@@ -10,10 +10,13 @@ import Kingfisher
 
 final class ImageGalleryCell: UICollectionViewCell {
     
+    // MARK: - Static Properties
     static var identifier: String { "\(Self.self)" }
     
+    // MARK: - Properties
     var onFavoriteTapped: (() -> Void)?
     
+    // MARK: - UI Elements
     private let imagesImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFill
@@ -31,6 +34,7 @@ final class ImageGalleryCell: UICollectionViewCell {
         return button
     }()
     
+    // MARK: - Initialization
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupUI()
@@ -40,6 +44,7 @@ final class ImageGalleryCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
+    // MARK: - Setup
     private func setupUI() {
         contentView.addSubview(imagesImageView)
         contentView.addSubview(likeButton)
@@ -64,6 +69,7 @@ final class ImageGalleryCell: UICollectionViewCell {
         likeButton.addTarget(self, action: #selector(likeButtonPressed), for: .touchUpInside)
     }
     
+    // MARK: - Configuration
     func configure(with image: Images, isFavorite: Bool) {
         imagesImageView.image = nil
         imagesImageView.backgroundColor = .systemGray6
@@ -78,11 +84,13 @@ final class ImageGalleryCell: UICollectionViewCell {
         likeButton.isSelected = isFavorite
     }
     
+    // MARK: - Actions
     @objc private func likeButtonPressed() {
         likeButton.isSelected.toggle()
         onFavoriteTapped?()
     }
     
+    // MARK: - Reuse
     override func prepareForReuse() {
         super.prepareForReuse()
         imagesImageView.kf.cancelDownloadTask()

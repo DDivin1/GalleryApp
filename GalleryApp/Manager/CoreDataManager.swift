@@ -33,7 +33,7 @@ final class CoreDataManager {
             do {
                 try context.save()
             } catch {
-                print ("Error saving context: \(error)")
+                print("Error saving context: \(error)")
             }
         }
     }

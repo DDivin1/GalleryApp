@@ -8,6 +8,7 @@
 import Foundation
 import CoreData
 
+// MARK: - Protocol
 protocol IFavoritesStorage {
     func getAllFavorites() -> [Images]
     func toggleFavorite(_ image: Images)
@@ -18,9 +19,11 @@ protocol IFavoritesStorage {
 
 final class FavoritesStorage: IFavoritesStorage {
     
+    // MARK: - Private Properties
     private let context = CoreDataManager.shared.context
     private let favoritesKey = AppConstants.Strings.favoritesKey
     
+    // MARK: - Public Methods
     func getAllFavorites() -> [Images] {
         let fetchRequest: NSFetchRequest<FavoriteImage> = FavoriteImage.fetchRequest()
         
@@ -77,10 +80,10 @@ final class FavoritesStorage: IFavoritesStorage {
         
         do {
             let results = try context.fetch(fetchRequest)
-            let ids = results.compactMap { $0.id as? String}
+            let ids = results.compactMap { $0.id}
             return Set(ids)
         } catch {
-            print ("CoreData fetch error: \(error)")
+            print("CoreData fetch error: \(error)")
             return []
         }
 

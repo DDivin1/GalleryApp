@@ -11,13 +11,16 @@ import Foundation
 
 @testable import GalleryApp
 
+// MARK: - ImageGalleryViewModelTest
 final class ImageGalleryViewModelTest: XCTestCase {
     
+    // MARK: - Properties
     var sut: ImageGalleryViewModel!
     var networkStub: NetworkServiceStub!
     var storageMock: FavoritesStorageMock!
     var cancellables: Set<AnyCancellable>!
     
+    // MARK: - Setup & Teardown
     override func setUp() {
         super.setUp()
         networkStub = NetworkServiceStub()
@@ -35,6 +38,7 @@ final class ImageGalleryViewModelTest: XCTestCase {
         super.tearDown()
     }
     
+    // MARK: - Tests
     func test_loadInitialImages_success() {
         // Given
         let expentation = self.expectation(description: "Image loaded succsessfully")
@@ -81,6 +85,7 @@ final class ImageGalleryViewModelTest: XCTestCase {
         
     }
     
+    // MARK: - Helpers
     private func makeTestImage(id: String) -> Images {
         Images(
             id: id,

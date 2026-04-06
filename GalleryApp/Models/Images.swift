@@ -50,5 +50,3 @@ struct User: Codable {
         name ?? username ?? "Unknown"
     }
 }
-
-

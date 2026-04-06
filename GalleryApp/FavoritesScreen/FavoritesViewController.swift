@@ -10,10 +10,12 @@ import Combine
 
 final class FavoritesViewController: UIViewController {
     
+    // MARK: - Properties
     private let viewModel: FavoritesViewModel
     private var collectionView: UICollectionView!
     private var cancellables: Set<AnyCancellable> = []
     
+    // MARK: - UI Elements
     private let loadingIndicator: UIActivityIndicatorView = {
         let indicator = UIActivityIndicatorView(style: .large)
         indicator.hidesWhenStopped = true
@@ -31,16 +33,17 @@ final class FavoritesViewController: UIViewController {
         return label
     }()
     
-    
+    // MARK: - Initialization
     init(viewModel: FavoritesViewModel) {
         self.viewModel = viewModel
-        super.init (nibName: nil, bundle: nil)
+        super.init(nibName: nil, bundle: nil)
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
+    // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         title = FavoritesScreenConstants.Strings.title
@@ -49,8 +52,9 @@ final class FavoritesViewController: UIViewController {
         bindViewModel()
         setupEmptyLabel()
         viewModel.loadFavorites()
-        }
+    }
     
+    // MARK: - Setup
     private func setupCollectionView() {
         
         view.addSubview(loadingIndicator)
@@ -58,7 +62,7 @@ final class FavoritesViewController: UIViewController {
         
         NSLayoutConstraint.activate([
             loadingIndicator.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            loadingIndicator.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            loadingIndicator.centerYAnchor.constraint(equalTo: view.centerYAnchor)
         ])
         
         let layout = UICollectionViewFlowLayout()
@@ -90,6 +94,21 @@ final class FavoritesViewController: UIViewController {
         collectionView.delegate = self
     }
     
+    private func setupEmptyLabel() {
+        view.addSubview(emptyLabel)
+        emptyLabel.translatesAutoresizingMaskIntoConstraints = false
+        
+        NSLayoutConstraint.activate([
+            emptyLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            emptyLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            emptyLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor,
+                                                 constant: FavoritesScreenConstants.Layout.trailingConstant),
+            emptyLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor,
+                                                constant: FavoritesScreenConstants.Layout.leadingConstant)
+        ])
+    }
+    
+    // MARK: - Binding
     private func bindViewModel() {
         viewModel.$favoritesImages
             .receive(on: DispatchQueue.main)
@@ -111,20 +130,7 @@ final class FavoritesViewController: UIViewController {
             .store(in: &cancellables)
     }
     
-    private func setupEmptyLabel() {
-        view.addSubview(emptyLabel)
-        emptyLabel.translatesAutoresizingMaskIntoConstraints = false
-        
-        NSLayoutConstraint.activate([
-            emptyLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            emptyLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor),
-            emptyLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor,
-                                                 constant: FavoritesScreenConstants.Layout.trailingConstant),
-            emptyLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor,
-                                                constant: FavoritesScreenConstants.Layout.leadingConstant)
-        ])
-    }
-    
+    // MARK: - Actions
     @objc private func imageTapped(_ sender: UITapGestureRecognizer) {
         guard let cell = sender.view as? ImageGalleryCell,
               let indexPath = collectionView.indexPath(for: cell) else {
@@ -134,6 +140,7 @@ final class FavoritesViewController: UIViewController {
     }
 }
 
+// MARK: - UICollectionViewDataSource
 extension FavoritesViewController: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -153,8 +160,8 @@ extension FavoritesViewController: UICollectionViewDataSource {
         
         cell.configure(with: image, isFavorite: isFavorite)
         
-        cell.onFavoriteTapped = { [weak self, weak cell] in
-            guard let self = self, let cell = cell else { return }
+        cell.onFavoriteTapped = { [weak self] in
+            guard let self = self else { return }
             
             let imageToRemove = self.viewModel.favoritesImages[indexPath.item]
             self.viewModel.removeFromFavorites(imageID: imageToRemove.id)
@@ -165,6 +172,7 @@ extension FavoritesViewController: UICollectionViewDataSource {
     }
 }
 
+// MARK: - UICollectionViewDelegate
 extension FavoritesViewController: UICollectionViewDelegate {
     
 }

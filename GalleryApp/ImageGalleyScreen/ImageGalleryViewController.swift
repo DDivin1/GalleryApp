@@ -10,10 +10,12 @@ import Combine
 
 final class ImageGalleryViewController: UIViewController {
     
+    // MARK: - Properties
     private let viewModel: ImageGalleryViewModel
     private var collectionView: UICollectionView!
     private var cancellables = Set<AnyCancellable>()
     
+    // MARK: - UI Elements
     private let loadingIndicator: UIActivityIndicatorView = {
         let indicator = UIActivityIndicatorView(style: .large)
         indicator.hidesWhenStopped = true
@@ -55,6 +57,7 @@ final class ImageGalleryViewController: UIViewController {
         return indicator
     }()
     
+    // MARK: - Initialization
     init (viewModel: ImageGalleryViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
@@ -64,6 +67,7 @@ final class ImageGalleryViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
+    // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
@@ -85,6 +89,7 @@ final class ImageGalleryViewController: UIViewController {
         collectionView.reloadData()
     }
     
+    // MARK: - Setup
     private func setupCollectionView() {
         
         let layout = UICollectionViewFlowLayout()
@@ -148,6 +153,11 @@ final class ImageGalleryViewController: UIViewController {
         collectionView.dataSource = self
     }
     
+    private func setupInfiniteScroll() {
+        collectionView.delegate = self
+    }
+    
+    // MARK: - Binding
     private func bindViewModel() {
         
         viewModel.$images
@@ -189,6 +199,7 @@ final class ImageGalleryViewController: UIViewController {
                     self?.footerLoadingView.stopAnimating()
                 }
             }
+            .store(in: &cancellables)
         
         viewModel.$errorMessage
             .receive(on: DispatchQueue.main)
@@ -203,6 +214,7 @@ final class ImageGalleryViewController: UIViewController {
             .store(in: &cancellables)
     }
     
+    // MARK: - UI Updates
     private func updateStateViews(isLoading: Bool, hasError: Bool, isEmpty: Bool) {
         if isLoading {
             loadingIndicator.startAnimating()
@@ -216,10 +228,7 @@ final class ImageGalleryViewController: UIViewController {
         collectionView.isHidden = isLoading || hasError
     }
     
-    private func setupInfiniteScroll() {
-        collectionView.delegate = self
-    }
-    
+    // MARK: - Actions
     @objc func favoritesButtonPressed() {
         viewModel.showFavorites()
     }
@@ -235,7 +244,7 @@ final class ImageGalleryViewController: UIViewController {
     }
 }
 
-
+// MARK: - UICollectionViewDataSource
 extension ImageGalleryViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         viewModel.images.count
@@ -273,11 +282,12 @@ extension ImageGalleryViewController: UICollectionViewDelegateFlowLayout {
     
 }
 
+// MARK: - UICollectionViewDelegate
 extension ImageGalleryViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         let lastItem = viewModel.images.count - 1
         if indexPath.item >= lastItem && !viewModel.isLoadingMore {
-            if viewModel.canLoadMoreImages(){
+            if viewModel.canLoadMoreImages() {
                 viewModel.loadMoreImages()
             }
         }
