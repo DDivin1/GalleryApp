@@ -135,6 +135,23 @@ GalleryApp/
     └── UnitTests/
         └── GalleryAppTest.swift
 ```
+## Screenshots
+
+### Gallery Screen
+
+| Without Likes | With Likes |
+|:-------------:|:----------:|
+| ![Gallery without likes](screenshots/gallery-without-likes.png) | ![Gallery with likes](screenshots/gallery-with-likes.png) |
+
+### Favorites Screen
+
+| Empty State | With Items |
+|:-----------:|:----------:|
+| ![Favorites empty](screenshots/favorites-empty.png) | ![Favorites with items](screenshots/favorites-with-items.png) |
+
+### Detail Screen
+
+![Image Detail](screenshots/detail.png)
 
 ## Setup & Configuration
 
