@@ -73,6 +73,8 @@ Swit, UIKit, Combine, CoreData
 ---
 
 ## Project Structure
+
+```text
 GalleryApp/
 ├── App+coordinator/
 │   ├── AppDelegate.swift
@@ -132,6 +134,7 @@ GalleryApp/
     │   └── FavoritesStorageMock.swift
     └── UnitTests/
         └── GalleryAppTest.swift
+```
 
 ## Setup & Configuration
 
