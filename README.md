@@ -31,19 +31,19 @@ Swit, UIKit, Combine, CoreData
 ## Architecture
 
 ### MVVM + Coordinator
-┌─────────────────┐
-│ AppCoordinator  │
-└────────┬────────┘
-│
+         ┌─────────────────┐
+         │ AppCoordinator  │
+         └────────┬────────┘
+                  │
 ┌─────────────────┼─────────────────┐
-▼ ▼ ▼
+                ▼ ▼ ▼
 ┌─────────────┐ ┌─────────────┐ ┌─────────────┐
-│ Gallery │ │ Detail │ │ Favorites │
-│ Module │ │ Module │ │ Module │
+│ Gallery     │ │ Detail      │ │ Favorites   │
+│ Module      │ │ Module      │ │ Module      │
 ├─────────────┤ ├─────────────┤ ├─────────────┤
-│ • View │ │ • View │ │ • View │
+│ • View      │ │ • View      │ │ • View      │
 │ • ViewModel │ │ • ViewModel │ │ • ViewModel │
-│ • Assembly │ │ • Assembly │ │ • Assembly │
+│ • Assembly  │ │ • Assembly  │ │ • Assembly  │
 └─────────────┘ └─────────────┘ └─────────────┘
 
 ### Technology Stack
