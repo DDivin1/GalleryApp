@@ -31,12 +31,12 @@ Swit, UIKit, Combine, CoreData
 ## Architecture
 
 ### MVVM + Coordinator
-         ┌─────────────────┐
-         │ AppCoordinator  │
-         └────────┬────────┘
-                  │
-┌─────────────────┼─────────────────┐
-                ▼ ▼ ▼
+               ┌─────────────────┐
+               │ AppCoordinator  │
+               └────────┬────────┘
+                        │
+      ┌─────────────────┼─────────────────┐
+                      ▼ ▼ ▼
 ┌─────────────┐ ┌─────────────┐ ┌─────────────┐
 │ Gallery     │ │ Detail      │ │ Favorites   │
 │ Module      │ │ Module      │ │ Module      │
