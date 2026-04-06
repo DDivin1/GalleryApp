@@ -37,14 +37,14 @@ Swit, UIKit, Combine, CoreData
                         │
       ┌─────────────────┼─────────────────┐
                       ▼ ▼ ▼
-┌─────────────┐ ┌─────────────┐ ┌─────────────┐
-│ Gallery     │ │ Detail      │ │ Favorites   │
-│ Module      │ │ Module      │ │ Module      │
-├─────────────┤ ├─────────────┤ ├─────────────┤
-│ • View      │ │ • View      │ │ • View      │
-│ • ViewModel │ │ • ViewModel │ │ • ViewModel │
-│ • Assembly  │ │ • Assembly  │ │ • Assembly  │
-└─────────────┘ └─────────────┘ └─────────────┘
+┌─────────────┐  ┌─────────────┐  ┌─────────────┐
+│ Gallery     │  │ Detail      │  │ Favorites   │
+│ Module      │  │ Module      │  │ Module      │
+├─────────────┤  ├─────────────┤  ├─────────────┤
+│ • View      │  │ • View      │  │ • View      │
+│ • ViewModel │  │ • ViewModel │  │ • ViewModel │
+│ • Assembly  │  │ • Assembly  │  │ • Assembly  │
+└─────────────┘  └─────────────┘  └─────────────┘
 
 ### Technology Stack
 
